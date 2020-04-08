@@ -20,3 +20,4 @@ bin/
 gen/
 local.properties
 proguard/
+.idea/
