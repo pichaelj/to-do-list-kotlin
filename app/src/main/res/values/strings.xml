@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">ToDoAppArchitecture</string>
+    <string name="add_place">Add Place</string>
+    <string name="add_text">Add Text</string>
+    <string name="add_button_text">ADD</string>
+    <string name="todo_id">ToDo Id</string>
+    <string name="modify_note">Modify Note</string>
+    <string name="delete_button_description">delete button</string>
+    <string name="task_place">Task Place</string>
+    <string name="task_name">Task Name</string>
+    <string name="task_id">id</string>
+</resources>
