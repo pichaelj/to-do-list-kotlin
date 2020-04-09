@@ -7,7 +7,6 @@ object TaskEntryContract {
 
         companion object{
             const val TABLE_NAME = "tasks"
-            //const val TASK_KEY_ID = "task_id"
             const val COLUMN_NAME_TITLE = "task_name"
             const val COLUMN_NAME_SUBTITLE = "task_place"
         }
