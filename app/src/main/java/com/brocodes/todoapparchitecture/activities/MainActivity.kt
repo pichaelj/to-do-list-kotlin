@@ -6,17 +6,30 @@ import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.brocodes.todoapparchitecture.model.Task
 import com.brocodes.todoapparchitecture.sqllitedatabaseutils.TaskDBHelper
+import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
+
+    private lateinit var linearLayoutManager: LinearLayoutManager
+    private lateinit var dbHelper: TaskDBHelper
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        dbHelper = TaskDBHelper(this)
+
+        linearLayoutManager = LinearLayoutManager(this)
+        notes_recycler_view.layoutManager = linearLayoutManager
+
         val addNoteButton: Button = findViewById(R.id.add_note_button)
         addNoteButton.setOnClickListener { addNote() }
+
+        val taskList = dbHelper.getAllTasks()
+
     }
 
     private fun addNote(){
@@ -39,7 +52,7 @@ class MainActivity : AppCompatActivity() {
                 val task = Task(taskName, taskPlace)
 
                 try {
-                    val dbHelper = TaskDBHelper(this)
+
                     dbHelper.addTask(task)
                     taskNameEditText.setText("")
                     taskPlaceEditText.setText("")

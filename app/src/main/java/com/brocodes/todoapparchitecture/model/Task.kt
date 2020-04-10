@@ -1,3 +1,3 @@
 package com.brocodes.todoapparchitecture.model
 
-data class Task(val task: String, val taskPlace: String)
+data class Task(val taskId: Int?, val task: String, val taskPlace: String)
