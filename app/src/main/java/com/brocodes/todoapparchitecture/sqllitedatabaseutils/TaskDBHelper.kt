@@ -5,10 +5,10 @@ import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.provider.BaseColumns
+import android.util.Log
 import com.brocodes.todoapparchitecture.model.Task
 
 class TaskDBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
-
 
 
     override fun onCreate(db: SQLiteDatabase) {
@@ -29,6 +29,31 @@ class TaskDBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, 
 
 
         return db.insert(TaskEntryContract.TaskEntry.TABLE_NAME, null, values)
+    }
+
+    fun getAllTasks() : ArrayList<Task>{
+        val taskArrayList = ArrayList<Task>()
+
+        val selectQuery = "SELECT  * FROM ${TaskEntryContract.TaskEntry.TABLE_NAME}"
+        val db = this.readableDatabase
+        val cursor = db.rawQuery(selectQuery, null)
+        if (cursor.moveToFirst()) {
+            do {
+                val taskId = cursor.getInt(cursor.getColumnIndex(BaseColumns._ID))
+                val taskName = cursor.getString(cursor.getColumnIndex(TaskEntryContract.TaskEntry.COLUMN_NAME_TITLE))
+                val taskPlace = cursor.getString(cursor.getColumnIndex(TaskEntryContract.TaskEntry.COLUMN_NAME_SUBTITLE))
+                Log.d("task gotten ", taskName)
+
+                val task = Task(taskId, taskName, taskPlace)
+                taskArrayList.add(task)
+
+            } while (cursor.moveToNext())
+
+        }
+        cursor.close()
+
+
+        return taskArrayList
     }
 
 
