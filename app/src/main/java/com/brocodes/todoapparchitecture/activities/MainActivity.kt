@@ -1,4 +1,4 @@
-package com.brocodes.todoapparchitecture
+package com.brocodes.todoapparchitecture.activities
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -7,13 +7,18 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.brocodes.todoapparchitecture.R
+import com.brocodes.todoapparchitecture.adapters.RecyclerViewAdapter
 import com.brocodes.todoapparchitecture.model.Task
 import com.brocodes.todoapparchitecture.sqllitedatabaseutils.TaskDBHelper
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
+
     private lateinit var linearLayoutManager: LinearLayoutManager
+    private lateinit var recyclerViewAdapter: RecyclerViewAdapter
     private lateinit var dbHelper: TaskDBHelper
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -22,13 +27,17 @@ class MainActivity : AppCompatActivity() {
 
         dbHelper = TaskDBHelper(this)
 
-        linearLayoutManager = LinearLayoutManager(this)
-        notes_recycler_view.layoutManager = linearLayoutManager
-
         val addNoteButton: Button = findViewById(R.id.add_note_button)
         addNoteButton.setOnClickListener { addNote() }
 
+        linearLayoutManager = LinearLayoutManager(this)
+
+        val notesRecyclerView = findViewById<RecyclerView>(R.id.notes_recycler_view)
+        notesRecyclerView.layoutManager = linearLayoutManager
+
         val taskList = dbHelper.getAllTasks()
+        recyclerViewAdapter = RecyclerViewAdapter(taskList)
+        notesRecyclerView.adapter = recyclerViewAdapter
 
     }
 
@@ -49,7 +58,7 @@ class MainActivity : AppCompatActivity() {
 
                 val taskName = taskNameEditText.text.toString().trim()
                 val taskPlace = taskPlaceEditText.text.toString().trim()
-                val task = Task(taskName, taskPlace)
+                val task = Task(null, taskName, taskPlace)
 
                 try {
 
