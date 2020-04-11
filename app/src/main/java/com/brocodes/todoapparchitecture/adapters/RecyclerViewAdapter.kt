@@ -25,6 +25,11 @@ class RecyclerViewAdapter(private val tasks: ArrayList<Task>) : RecyclerView.Ada
         holder.bind(tasks[position])
     }
 
+    fun removeItem(position: Int) {
+        tasks.removeAt(position - 1)
+        notifyItemRangeChanged(position, tasks.size)
+    }
+
 
 
     //Make the class extend RecyclerView.ViewHolder, allowing the adapter to use it as as a ViewHolder.

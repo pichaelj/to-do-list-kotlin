@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteOpenHelper
 import android.provider.BaseColumns
 import android.util.Log
 import com.brocodes.todoapparchitecture.model.Task
+import com.brocodes.todoapparchitecture.sqllitedatabaseutils.TaskEntryContract.TaskEntry.Companion.TABLE_NAME
 
 class TaskDBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
 
@@ -28,13 +29,13 @@ class TaskDBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, 
         values.put(TaskEntryContract.TaskEntry.COLUMN_NAME_SUBTITLE, task.taskPlace)
 
 
-        return db.insert(TaskEntryContract.TaskEntry.TABLE_NAME, null, values)
+        return db.insert(TABLE_NAME, null, values)
     }
 
     fun getAllTasks() : ArrayList<Task>{
         val taskArrayList = ArrayList<Task>()
 
-        val selectQuery = "SELECT  * FROM ${TaskEntryContract.TaskEntry.TABLE_NAME}"
+        val selectQuery = "SELECT  * FROM $TABLE_NAME"
         val db = this.readableDatabase
         val cursor = db.rawQuery(selectQuery, null)
         if (cursor.moveToFirst()) {
@@ -55,6 +56,52 @@ class TaskDBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, 
 
         return taskArrayList
     }
+
+    fun deleteTask(taskId: String){
+        // Gets the data repository in write mode
+        val db = this.writableDatabase
+        // Define 'where' part of query.
+        val selection = BaseColumns._ID + " LIKE ?"
+        // Specify arguments in placeholder order.
+        val selectionArgs = arrayOf(taskId)
+        // Issue SQL statement.
+        db.delete(TABLE_NAME, selection, selectionArgs)
+
+    }
+
+    fun getRows() : Int{
+        val db = this.readableDatabase
+        val selectQuery = "SELECT  * FROM $TABLE_NAME"
+        val cursor = db.rawQuery(selectQuery, null)
+        val numberOfRows = cursor.count
+        cursor.close()
+        return numberOfRows
+    }
+
+
+    fun isInDatabase(taskId: Int) : Boolean{
+        val db = this.readableDatabase
+        val selectQuery = "SELECT  * FROM $TABLE_NAME"
+        val cursor = db.rawQuery(selectQuery, null)
+        if (cursor.moveToFirst()) {
+            do {
+                val mTaskId = cursor.getInt(cursor.getColumnIndex(BaseColumns._ID))
+                if(taskId == mTaskId) return true
+
+            } while (cursor.moveToNext())
+
+        }
+        cursor.close()
+        return false
+
+    }
+
+
+
+
+
+
+
 
 
     companion object {
