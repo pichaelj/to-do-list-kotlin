@@ -16,7 +16,6 @@ import com.brocodes.todoapparchitecture.sqllitedatabaseutils.TaskDBHelper
 
 class MainActivity : AppCompatActivity() {
 
-
     private lateinit var linearLayoutManager: LinearLayoutManager
     private lateinit var recyclerViewAdapter: RecyclerViewAdapter
     private lateinit var dbHelper: TaskDBHelper
@@ -67,6 +66,9 @@ class MainActivity : AppCompatActivity() {
                 try {
 
                     dbHelper.addTask(task)
+                    taskList.add(task)
+                    recyclerViewAdapter.notifyDataSetChanged()
+
                     taskNameEditText.setText("")
                     taskPlaceEditText.setText("")
                 } catch (e: Exception) {
